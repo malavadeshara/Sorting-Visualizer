@@ -5,7 +5,7 @@ import SortingVisualizer from './Components/SortingVisualizer'
 function App() {
 
   return (
-    <div>
+    <div className='w-full h-screen bg-[#f8fafc]'>
       <SortingVisualizer />
     </div>
   )

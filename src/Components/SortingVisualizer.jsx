@@ -1,12 +1,30 @@
 import React, { useState, useEffect } from 'react';
 
 const SortingVisualizer = () => {
+    const [arraySize, setArraySize] = useState(100); // Default size
     const [array, setArray] = useState([]);
     const [animations, setAnimations] = useState([]);
-    const [selectedAlgorithm, setSelectedAlgorithm] = useState('');
+    const [selectedAlgorithm, setSelectedAlgorithm] = useState('bubbleSort');
+
+    const changeHandler = (e) => {
+        setSelectedAlgorithm(e.target.value);
+    };
+
+    const rangeChangeHandler = (e) => {
+        setArraySize(e.target.value);
+        resetArray(e.target.value);
+    };
 
     useEffect(() => {
-        resetArray();
+        // do nothing
+    }, [selectedAlgorithm]);
+
+    useEffect(() => {
+        console.log(arraySize);
+    }, [arraySize]);
+
+    useEffect(() => {
+        resetArray(arraySize);
     }, []);
 
     useEffect(() => {
@@ -19,14 +37,14 @@ const SortingVisualizer = () => {
 
             setTimeout(() => {
                 if (object.type === "compare") {
-                    arrayBars[i].style.backgroundColor = 'red';
-                    arrayBars[j].style.backgroundColor = 'red';
+                    arrayBars[i].style.backgroundColor = '#fcd34d';
+                    arrayBars[j].style.backgroundColor = '#fcd34d';
 
                     // Revert back to original color
                     setTimeout(() => {
-                        arrayBars[i].style.backgroundColor = 'blue';
-                        arrayBars[j].style.backgroundColor = 'blue';
-                    }, 50);
+                        arrayBars[i].style.backgroundColor = '#60a5fa';
+                        arrayBars[j].style.backgroundColor = '#60a5fa';
+                    }, 200);
                 }
 
                 else if (object.type === "swap") {
@@ -34,13 +52,18 @@ const SortingVisualizer = () => {
                     arrayBars[i].style.height = arrayBars[j].style.height;
                     arrayBars[j].style.height = tempHeight;
 
-                    arrayBars[i].style.backgroundColor = 'blue';
-                    arrayBars[j].style.backgroundColor = 'blue';
+                    arrayBars[i].style.backgroundColor = '#f87171';
+                    arrayBars[j].style.backgroundColor = '#f87171';
+
+                    setTimeout(() => {
+                        arrayBars[i].style.backgroundColor = '#60a5fa';
+                        arrayBars[j].style.backgroundColor = '#60a5fa';
+                    }, 50);
                 }
 
                 else if (object.type === "overwrite") {
                     const [barIndex, newHeight] = object.index;
-                    arrayBars[barIndex].style.height = `${newHeight}px`;
+                    arrayBars[barIndex].style.height = `${newHeight}%`;
                     arrayBars[barIndex].style.backgroundColor = 'green';
 
                     // Optional: reset color
@@ -49,13 +72,13 @@ const SortingVisualizer = () => {
                     }, 50);
                 }
 
-            }, index * 100);
+            }, index * 50);
         });
     }, [animations]);
 
 
-    function resetArray() {
-        const newArray = generateRandomArray(10); // Change size as needed
+    function resetArray(arraySize) {
+        const newArray = generateRandomArray(arraySize); // Change size as needed
         setArray(newArray);
         setAnimations([]);
     }
@@ -87,7 +110,7 @@ const SortingVisualizer = () => {
         mergeSortHelper(array, 0, array.length - 1, animations);
         return animations;
     }
-    
+
     function mergeSortHelper(array, left, right, animations) {
         if (left < right) {
             const mid = Math.floor((left + right) / 2);
@@ -96,19 +119,19 @@ const SortingVisualizer = () => {
             merge(array, left, mid, right, animations);
         }
     }
-    
+
     function merge(array, left, mid, right, animations) {
         const leftArray = array.slice(left, mid + 1);
         const rightArray = array.slice(mid + 1, right + 1);
         let i = 0, j = 0, k = left;
-    
+
         while (i < leftArray.length && j < rightArray.length) {
             // Compare elements
             animations.push({
                 index: [left + i, mid + 1 + j],
                 type: "compare"
             });
-    
+
             if (leftArray[i] <= rightArray[j]) {
                 // Overwrite main array at index k with leftArray[i]
                 animations.push({
@@ -125,7 +148,7 @@ const SortingVisualizer = () => {
                 array[k++] = rightArray[j++];
             }
         }
-    
+
         while (i < leftArray.length) {
             animations.push({
                 index: [left + i, left + i],
@@ -137,7 +160,7 @@ const SortingVisualizer = () => {
             });
             array[k++] = leftArray[i++];
         }
-    
+
         while (j < rightArray.length) {
             animations.push({
                 index: [mid + 1 + j, mid + 1 + j],
@@ -150,7 +173,7 @@ const SortingVisualizer = () => {
             array[k++] = rightArray[j++];
         }
     }
-    
+
 
     function quickSort(array) {
         const animations = [];
@@ -270,7 +293,10 @@ const SortingVisualizer = () => {
     }
 
 
-    function visualizeSorting() {
+    function visualizeSorting(e) {
+
+        e.preventDefault(); // Prevent form submission
+
         let Animations = [];
 
         if (selectedAlgorithm === 'bubbleSort') {
@@ -290,31 +316,76 @@ const SortingVisualizer = () => {
         setAnimations(Animations); // this triggers the useEffect above
     }
 
-    
+
     return (
-        <div>
-            <div style={{ display: 'flex', alignItems: 'flex-end', height: '200px' }}>
+        <div className='w-full h-3/4 flex items-center justify-around flex-col'>
+
+            <div className='flex justify-between items-center w-11/12'>
+
+                <div className='text-4xl font-semibold p-2'>
+                    {selectedAlgorithm}
+                </div>
+
+                <div className='flex justify-center items-center gap-6'>
+                    <div className='flex justify-center items-center p-2 px-4 gap-2'>
+                        <label htmlFor="size" className='text-xl font-semibold'> Size : </label>
+                        <input
+                            type='range'
+                            min='100'
+                            max='200'
+                            value={arraySize}
+                            onChange={rangeChangeHandler}
+                        />
+                        <label htmlFor="size" className='text-xl font-semibold'>{arraySize}</label>
+                    </div>
+
+                    <div className='flex justify-center items-center'>
+                        <button
+                            onClick={() => { resetArray(arraySize) }}
+                            className='flex justify-center items-center gap-2 p-2 px-4 text-xl font-semibold border-none rounded-2xl transition duration-300 ease-in-out'>
+                            <i className="ri-refresh-line"></i>
+                            Generate New Array
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div style={{ display: 'flex', alignItems: 'flex-end' }} className='w-10/12 h-[60%] p-2'>
                 {array.map((value, idx) => (
                     <div
                         key={idx}
                         className="array-bar"
                         style={{
-                            height: `${value}px`,
-                            width: '20px',
-                            margin: '0 2px',
-                            backgroundColor: 'blue',
+                            height: `${value}%`,
+                            width: `calc(100% / ${arraySize} - 1px)`,  // Adjust width based on array size',
+                            margin: '0 0.5px',
+                            backgroundColor: '#60a5fa',
+                            borderTopLeftRadius: '50px',
+                            borderTopRightRadius: '50px',
                         }}
                     ></div>
                 ))}
             </div>
-            <button onClick={resetArray}>Generate New Array</button>
-            <button onClick={() => setSelectedAlgorithm('bubbleSort')}>Bubble Sort</button>
-            <button onClick={() => setSelectedAlgorithm('mergeSort')}>Merge Sort</button>
-            <button onClick={() => setSelectedAlgorithm('quickSort')}>Quick Sort</button>
-            <button onClick={() => setSelectedAlgorithm('heapSort')}>Heap Sort</button>
-            <button onClick={() => setSelectedAlgorithm('selectionSort')}>Selection Sort</button>
-            <button onClick={() => setSelectedAlgorithm('insertionSort')}>Insertion Sort</button>
-            <button onClick={visualizeSorting}>Visualize {selectedAlgorithm}</button>
+
+            <form onSubmit={(e) => e.preventDefault()} className='flex justify-around items-center gap-2 p-2 w-10/12'>
+                <div className='flex justify-center items-center gap-2 p-2'>
+                    <label className="text-xl font-semibold">Select Sorting Algorithm : </label>
+                    <select value={selectedAlgorithm} onChange={(e) => { changeHandler(e) }} className='text-xl font-semibold p-2'>
+                        <option value="bubbleSort" className='text-xl font-semibold p-2'>Bubble Sort</option>
+                        <option value="mergeSort" className='text-xl font-semibold p-2'>Merge Sort</option>
+                        <option value="quickSort" className='text-xl font-semibold p-2'>Quick Sort</option>
+                        <option value="heapSort" className='text-xl font-semibold p-2'>Heap Sort</option>
+                        <option value="selectionSort" className='text-xl font-semibold p-2'>Selection Sort</option>
+                        <option value="insertionSort" className='text-xl font-semibold p-2'>Insertion Sort</option>
+                    </select>
+                </div>
+
+                <button onClick={visualizeSorting} className='flex justify-center items-center gap-2 p-2 px-4 text-xl font-semibold rounded-2xl transition duration-300 ease-in-out'>
+                    <i className="ri-play-fill"></i> 
+                    <p>Visualize {selectedAlgorithm}</p>
+                </button>
+            </form>
+
         </div>
     );
 };
