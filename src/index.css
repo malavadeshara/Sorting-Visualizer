@@ -1,1 +1,25 @@
 @import "tailwindcss";
+
+.group:hover > div > img {
+    transform: scale(1.2);
+    transition: transform 0.3s ease-in-out;
+}
+
+/* @keyframes clickAnimation {
+    0% {
+        transform: scale(90%);
+    } 100% {
+        transform: scale(100%);
+    }
+}
+
+@layer utilities {
+    .animate-click {
+      animation: clickAnimation 0.3s ease;
+    }
+} */
+
+.clickAnimation {
+    transform: scale(0.9);
+    transition: transform 0.3s ease;
+}

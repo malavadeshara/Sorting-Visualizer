@@ -30,7 +30,7 @@ const SortingVisualizer = () => {
     useEffect(() => {
         if (animations.length === 0) return;
 
-        const arrayBars = document.getElementsByClassName('array-bar');
+        const arrayBars = document.getElementsByClassName('array-bar');``
 
         animations.forEach((object, index) => {
             const [i, j] = object.index;
@@ -318,9 +318,9 @@ const SortingVisualizer = () => {
 
 
     return (
-        <div className='w-full h-3/4 flex items-center justify-around flex-col'>
+        <div className='w-full h-[540px] flex items-center justify-around flex-col'>
 
-            <div className='flex justify-between items-center w-11/12'>
+            <div className='flex justify-between items-center w-10/12'>
 
                 <div className='text-4xl font-semibold p-2'>
                     {selectedAlgorithm}
@@ -331,8 +331,8 @@ const SortingVisualizer = () => {
                         <label htmlFor="size" className='text-xl font-semibold'> Size : </label>
                         <input
                             type='range'
-                            min='100'
-                            max='200'
+                            min='10'
+                            max='1000'
                             value={arraySize}
                             onChange={rangeChangeHandler}
                         />
