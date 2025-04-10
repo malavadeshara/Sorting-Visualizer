@@ -1,6 +1,6 @@
 // data.js
 
-const BubbleSortCodes = {
+const codeSamples = {
 
     c:
 `void bubble_sort(long arr[], long n) {
@@ -74,4 +74,3 @@ void bubbleSort(int arr[], int n) {
   };
   
   export default codeSamples;
-  

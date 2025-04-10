@@ -4,14 +4,17 @@ import CPP_Logo from '../Images/cppLogo.png'
 import JAVA_Logo from '../Images/JAVALogo.webp'
 import JS_Logo from '../Images/jsLogo.webp'
 import PYTHON_Logo from '../Images/pyLogo.png'
-// import ShowCode from '../Components/ShowCode'
+import ShowCode from '../Components/ShowCode'
 
 
 const SortingAlgorithmInfo = () => {
 
+    const [language, setLanguage] = React.useState('c');
+
     const buttonClickHandler = (e) => {
         const button = e.currentTarget;
         button.classList.add('clickAnimation');
+        setLanguage(e.currentTarget.getAttribute('value'));
         setTimeout(() => {
             button.classList.remove('clickAnimation');
         }, 300);
@@ -65,41 +68,42 @@ const SortingAlgorithmInfo = () => {
             </div>
 
             <div className='w-10/12 flex justify-center items-start gap-24 py-10 border-2'>
-                <div className='relative w-1/2 h-[540px] gap-8 border-2 flex flex-col items-start justify-center p-4'>
+                <div className='relative w-1/2 h-[600px] gap-8 border-2 flex flex-col items-start justify-center p-4'>
                     <h1 className='text-4xl font-bold self-start'>Implementation : </h1>
 
-                    <div className='w-full border-2 h-full flex flex-col gap-8 p-4'>
+                    <div className='w-full border-2 h-full flex flex-col gap-4 p-4'>
                         <div className='h-[60px] max-w-fit flex gap-2 items-center'>
-                            <div className='w-[70px] h-[50px] flex justify-center items-center border-2 rounded-[10px] cursor-pointer group' onClick={(e) => { buttonClickHandler(e); }}>
+                            <div className='w-[70px] h-[50px] flex justify-center items-center border-2 rounded-[10px] cursor-pointer group' onClick={(e) => { buttonClickHandler(e); }} value='c'>
                                 <div className='h-[40px] w-[40px] flex justify-center items-center p-1'>
                                     <img src={C_Logo} className='h-[100%] w-[100%]' />
                                 </div>
                             </div>
-                            <div className='w-[70px] h-[50px] flex justify-center items-center border-2 rounded-[10px] cursor-pointer group' onClick={(e) => { buttonClickHandler(e); }}>
+                            <div className='w-[70px] h-[50px] flex justify-center items-center border-2 rounded-[10px] cursor-pointer group' onClick={(e) => { buttonClickHandler(e); }} value='cpp'>
                                 <div className='h-[40px] w-[40px] flex justify-center items-center p-1'>
                                     <img src={CPP_Logo} className='h-[100%] w-[100%]' />
                                 </div>
                             </div>
-                            <div className='w-[70px] h-[50px] flex justify-center items-center border-2 rounded-[10px] cursor-pointer group' onClick={(e) => { buttonClickHandler(e); }}>
+                            <div className='w-[70px] h-[50px] flex justify-center items-center border-2 rounded-[10px] cursor-pointer group' onClick={(e) => { buttonClickHandler(e); }} value='java'>
                                 <div className='h-[40px] w-[40px] flex justify-center items-center p-1'>
                                     <img src={JAVA_Logo} className='h-[100%] w-[100%]' />
                                 </div>
                             </div>
-                            <div className='w-[70px] h-[50px] flex justify-center items-center border-2 rounded-[10px] cursor-pointer group' onClick={(e) => { buttonClickHandler(e); }}>
+                            <div className='w-[70px] h-[50px] flex justify-center items-center border-2 rounded-[10px] cursor-pointer group' onClick={(e) => { buttonClickHandler(e); }} value='javascript'>
                                 <div className='h-[40px] w-[40px] flex justify-center items-center p-1'>
                                     <img src={JS_Logo} className='h-[100%] w-[100%]' />
                                 </div>
                             </div>
-                            <div className='w-[70px] h-[50px] flex justify-center items-center border-2 rounded-[10px] cursor-pointer group' onClick={(e) => { buttonClickHandler(e); }}>
+                            <div className='w-[70px] h-[50px] flex justify-center items-center border-2 rounded-[10px] cursor-pointer group' onClick={(e) => { buttonClickHandler(e); }} value='python'>
                                 <div className='h-[40px] w-[40px] flex justify-center items-center p-1'>
                                     <img src={PYTHON_Logo} className='h-[100%] w-[100%]' />
                                 </div>
                             </div>
                         </div>
 
-                        <div className='border-2 w-full h-full'>
-                            {/* <ShowCode code={c}/> */}
+                        <div className='border-2 bg-gray-200 '>
+                            <ShowCode code={language} />
                         </div>
+
                     </div>
                 </div>
             </div>
