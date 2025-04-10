@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 const SortingVisualizer = () => {
-    const [arraySize, setArraySize] = useState(100); // Default size
+    const [arraySize, setArraySize] = useState(75); // Default size
     const [array, setArray] = useState([]);
     const [animations, setAnimations] = useState([]);
     const [selectedAlgorithm, setSelectedAlgorithm] = useState('bubbleSort');
@@ -30,7 +30,7 @@ const SortingVisualizer = () => {
     useEffect(() => {
         if (animations.length === 0) return;
 
-        const arrayBars = document.getElementsByClassName('array-bar');``
+        const arrayBars = document.getElementsByClassName('array-bar'); ``
 
         animations.forEach((object, index) => {
             const [i, j] = object.index;
@@ -323,7 +323,9 @@ const SortingVisualizer = () => {
             <div className='flex justify-between items-center w-10/12'>
 
                 <div className='text-4xl font-semibold p-2'>
-                    {selectedAlgorithm}
+                    {selectedAlgorithm
+                        .replace(/([A-Z])/g, ' $1')   // Add space before capital letters
+                        .replace(/^./, char => char.toUpperCase())}   {/* Capitalize first letter */}
                 </div>
 
                 <div className='flex justify-center items-center gap-6'>
@@ -331,8 +333,8 @@ const SortingVisualizer = () => {
                         <label htmlFor="size" className='text-xl font-semibold'> Size : </label>
                         <input
                             type='range'
-                            min='10'
-                            max='1000'
+                            min='50'
+                            max='100'
                             value={arraySize}
                             onChange={rangeChangeHandler}
                         />
@@ -381,7 +383,7 @@ const SortingVisualizer = () => {
                 </div>
 
                 <button onClick={visualizeSorting} className='flex justify-center items-center gap-2 p-2 px-4 text-xl font-semibold rounded-2xl transition duration-300 ease-in-out'>
-                    <i className="ri-play-fill"></i> 
+                    <i className="ri-play-fill"></i>
                     <p>Visualize {selectedAlgorithm}</p>
                 </button>
             </form>
