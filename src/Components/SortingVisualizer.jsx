@@ -2,14 +2,27 @@ import React, { useState, useEffect } from 'react';
 import SortingAlgorithmInfo from '../Components/SortingAlgorithmInfo'
 
 const SortingVisualizer = () => {
-    const [arraySize, setArraySize] = useState(75); // Default size
+    const [arraySize, setArraySize] = useState(30); // Default size
     const [array, setArray] = useState([]);
     const [animations, setAnimations] = useState([]);
     const [selectedAlgorithm, setSelectedAlgorithm] = useState('bubbleSort');
+    const [speed, setSpeed] = useState(3);
 
     const changeHandler = (e) => {
         setSelectedAlgorithm(e.target.value);
     };
+
+    const buttonClickHandler = (e) => {
+        const button = e.currentTarget;
+        button.classList.add('clickAnimation');
+        setTimeout(() => {
+            button.classList.remove('clickAnimation');
+        }, 200);
+    }
+
+    const speedChangeHandler = (e) => {
+        setSpeed(Number(e.target.value)); // convert string to number
+    }
 
     const rangeChangeHandler = (e) => {
         setArraySize(e.target.value);
@@ -30,52 +43,53 @@ const SortingVisualizer = () => {
 
     useEffect(() => {
         if (animations.length === 0) return;
-
+    
         const arrayBars = document.getElementsByClassName('array-bar');
-
+    
+        const delay = speed === 3 ? 250 : (speed === 2 ? 500 : 1000);
+    
         animations.forEach((object, index) => {
             const [i, j] = object.index;
-
+    
             setTimeout(() => {
                 if (object.type === "compare") {
-                    arrayBars[i].style.backgroundColor = 'white';
-                    arrayBars[j].style.backgroundColor = 'white';
-
-                    // Revert back to original color
+                    arrayBars[i].style.backgroundColor = 'red';
+                    arrayBars[j].style.backgroundColor = 'red';
+    
                     setTimeout(() => {
                         arrayBars[i].style.backgroundColor = '#60a5fa';
                         arrayBars[j].style.backgroundColor = '#60a5fa';
-                    }, 100);
+                    }, delay / 2);
                 }
-
+    
                 else if (object.type === "swap") {
                     const tempHeight = arrayBars[i].style.height;
                     arrayBars[i].style.height = arrayBars[j].style.height;
                     arrayBars[j].style.height = tempHeight;
-
-                    arrayBars[i].style.backgroundColor = 'crimson';
-                    arrayBars[j].style.backgroundColor = 'crimson';
-
+    
+                    arrayBars[i].style.backgroundColor = 'black';
+                    arrayBars[j].style.backgroundColor = 'black';
+    
                     setTimeout(() => {
                         arrayBars[i].style.backgroundColor = '#60a5fa';
                         arrayBars[j].style.backgroundColor = '#60a5fa';
-                    }, 100);
+                    }, delay / 2);
                 }
-
+    
                 else if (object.type === "overwrite") {
                     const [barIndex, newHeight] = object.index;
                     arrayBars[barIndex].style.height = `${newHeight}%`;
-                    arrayBars[barIndex].style.backgroundColor = 'yellow';
-
-                    // Optional: reset color
+                    arrayBars[barIndex].style.backgroundColor = 'green';
+    
                     setTimeout(() => {
                         arrayBars[barIndex].style.backgroundColor = '#60a5fa';
-                    }, 100);
+                    }, delay / 2);
                 }
-
-            }, index * 200);
+    
+            }, index * delay);
         });
-    }, [animations]);
+    }, [animations, speed]);
+    
 
 
     function resetArray(arraySize) {
@@ -271,24 +285,24 @@ const SortingVisualizer = () => {
     function insertionSort(array) {
         const animations = [];
         const n = array.length;
-    
+
         for (let i = 1; i < n; i++) {
             let j = i;
-    
+
             // Swap backwards until the current element is in correct position
             while (j > 0 && array[j - 1] > array[j]) {
                 animations.push({ index: [j - 1, j], type: "compare" });
                 animations.push({ index: [j - 1, j], type: "swap" });
-    
+
                 // Perform the swap
                 [array[j - 1], array[j]] = [array[j], array[j - 1]];
                 j--;
             }
         }
-    
+
         return animations;
     }
-    
+
 
 
     function visualizeSorting(e) {
@@ -328,12 +342,29 @@ const SortingVisualizer = () => {
                     </div>
 
                     <div className='flex justify-center items-center gap-6'>
+
+                        <div className='flex justify-center items-center p-2 px-4 gap-2'>
+                            <label htmlFor="speed" className='text-xl font-semibold'> Speed : </label>
+                            <input
+                                type='range'
+                                min='1'
+                                max='3'
+                                value={speed}
+                                onChange={speedChangeHandler}
+                            />
+                            <label htmlFor="speed" className='text-xl font-semibold'>
+                                {
+                                    speed === 3 ? '3X' : ((speed === 2) ? '2X' : '1X')
+                                }
+                            </label>
+                        </div>
+
                         <div className='flex justify-center items-center p-2 px-4 gap-2'>
                             <label htmlFor="size" className='text-xl font-semibold'> Size : </label>
                             <input
                                 type='range'
-                                min='50'
-                                max='100'
+                                min='10'
+                                max='50'
                                 value={arraySize}
                                 onChange={rangeChangeHandler}
                             />
@@ -342,8 +373,8 @@ const SortingVisualizer = () => {
 
                         <div className='flex justify-center items-center'>
                             <button
-                                onClick={() => { resetArray(arraySize) }}
-                                className='flex justify-center items-center gap-2 p-2 px-4 text-xl font-semibold border-none rounded-2xl transition duration-300 ease-in-out'>
+                                onClick={(e) => { resetArray(arraySize); buttonClickHandler(e) }}
+                                className='flex justify-center items-center gap-2 p-2 px-4 text-xl font-semibold rounded-2xl bg-gray-300 border-2 border-gray-400'>
                                 <i className="ri-refresh-line"></i>
                                 Generate New Array
                             </button>
@@ -382,9 +413,11 @@ const SortingVisualizer = () => {
                         </select>
                     </div>
 
-                    <button onClick={visualizeSorting} className='flex justify-center items-center gap-2 p-2 px-4 text-xl font-semibold rounded-2xl transition duration-300 ease-in-out'>
+                    <button onClick={(e) => { visualizeSorting(e); buttonClickHandler(e) }} className='flex justify-center items-center gap-2 p-2 px-4 text-xl font-semibold rounded-2xl transition  bg-gray-300 border-2 border-gray-400 duration-300 ease-in-out'>
                         <i className="ri-play-fill"></i>
-                        <p>Visualize {selectedAlgorithm}</p>
+                        <p>Visualize {selectedAlgorithm
+                            .replace(/([A-Z])/g, ' $1')
+                            .replace(/^./, char => char.toUpperCase())}</p>
                     </button>
                 </form>
             </div>
