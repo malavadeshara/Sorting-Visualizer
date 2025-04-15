@@ -1,13 +1,12 @@
 import './App.css'
 import React from 'react'
 import SortingVisualizer from './Components/SortingVisualizer'
-import SortingAlgorithmInfo from './Components/SortingAlgorithmInfo'
 import { Toaster } from 'react-hot-toast';
 
 function App() {
 
   return (
-    <div className='w-full h-full bg-[#f8fafc] flex items-center justify-center flex-col'>
+    <div className='w-full h-full outer bg-[#f8fafc] flex items-center justify-center flex-col'>
       <Toaster
         position="top-center"
         reverseOrder={false}
@@ -22,8 +21,7 @@ function App() {
           },
         }}
       />
-      <SortingVisualizer />
-      <SortingAlgorithmInfo />
+        <SortingVisualizer />
     </div>
   )
 }

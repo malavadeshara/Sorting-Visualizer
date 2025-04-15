@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import SortingAlgorithmInfo from '../Components/SortingAlgorithmInfo'
 
 const SortingVisualizer = () => {
     const [arraySize, setArraySize] = useState(75); // Default size
@@ -30,21 +31,21 @@ const SortingVisualizer = () => {
     useEffect(() => {
         if (animations.length === 0) return;
 
-        const arrayBars = document.getElementsByClassName('array-bar'); ``
+        const arrayBars = document.getElementsByClassName('array-bar');
 
         animations.forEach((object, index) => {
             const [i, j] = object.index;
 
             setTimeout(() => {
                 if (object.type === "compare") {
-                    arrayBars[i].style.backgroundColor = '#fcd34d';
-                    arrayBars[j].style.backgroundColor = '#fcd34d';
+                    arrayBars[i].style.backgroundColor = 'white';
+                    arrayBars[j].style.backgroundColor = 'white';
 
                     // Revert back to original color
                     setTimeout(() => {
                         arrayBars[i].style.backgroundColor = '#60a5fa';
                         arrayBars[j].style.backgroundColor = '#60a5fa';
-                    }, 200);
+                    }, 100);
                 }
 
                 else if (object.type === "swap") {
@@ -52,27 +53,27 @@ const SortingVisualizer = () => {
                     arrayBars[i].style.height = arrayBars[j].style.height;
                     arrayBars[j].style.height = tempHeight;
 
-                    arrayBars[i].style.backgroundColor = '#f87171';
-                    arrayBars[j].style.backgroundColor = '#f87171';
+                    arrayBars[i].style.backgroundColor = 'crimson';
+                    arrayBars[j].style.backgroundColor = 'crimson';
 
                     setTimeout(() => {
                         arrayBars[i].style.backgroundColor = '#60a5fa';
                         arrayBars[j].style.backgroundColor = '#60a5fa';
-                    }, 50);
+                    }, 100);
                 }
 
                 else if (object.type === "overwrite") {
                     const [barIndex, newHeight] = object.index;
                     arrayBars[barIndex].style.height = `${newHeight}%`;
-                    arrayBars[barIndex].style.backgroundColor = 'green';
+                    arrayBars[barIndex].style.backgroundColor = 'yellow';
 
                     // Optional: reset color
                     setTimeout(() => {
-                        arrayBars[barIndex].style.backgroundColor = 'blue';
-                    }, 50);
+                        arrayBars[barIndex].style.backgroundColor = '#60a5fa';
+                    }, 100);
                 }
 
-            }, index * 50);
+            }, index * 200);
         });
     }, [animations]);
 
@@ -267,30 +268,27 @@ const SortingVisualizer = () => {
         return animations;
     }
 
-
     function insertionSort(array) {
         const animations = [];
         const n = array.length;
+    
         for (let i = 1; i < n; i++) {
-            let key = array[i];
-            let j = i - 1;
-
-            // Compare key with elements in sorted part
-            while (j >= 0 && array[j] > key) {
-                animations.push({ index: [j, j + 1], type: "compare" });
-
-                // Shift element one position ahead
-                animations.push({ index: [j + 1, array[j]], type: "overwrite" });
-                array[j + 1] = array[j];
+            let j = i;
+    
+            // Swap backwards until the current element is in correct position
+            while (j > 0 && array[j - 1] > array[j]) {
+                animations.push({ index: [j - 1, j], type: "compare" });
+                animations.push({ index: [j - 1, j], type: "swap" });
+    
+                // Perform the swap
+                [array[j - 1], array[j]] = [array[j], array[j - 1]];
                 j--;
             }
-
-            // Insert the key
-            animations.push({ index: [j + 1, key], type: "overwrite" });
-            array[j + 1] = key;
         }
+    
         return animations;
     }
+    
 
 
     function visualizeSorting(e) {
@@ -318,75 +316,82 @@ const SortingVisualizer = () => {
 
 
     return (
-        <div className='w-full h-[540px] flex items-center justify-around flex-col'>
+        <div className='w-full max-h-full flex items-center justify-around flex-col outer bg-black text-white'>
 
-            <div className='flex justify-between items-center w-10/12'>
+            <div className='w-full h-[540px]  flex items-center justify-around flex-col'>
+                <div className='border-2 flex justify-between items-center w-10/12 mt-[30px]'>
 
-                <div className='text-4xl font-semibold p-2'>
-                    {selectedAlgorithm
-                        .replace(/([A-Z])/g, ' $1')   // Add space before capital letters
-                        .replace(/^./, char => char.toUpperCase())}   {/* Capitalize first letter */}
-                </div>
-
-                <div className='flex justify-center items-center gap-6'>
-                    <div className='flex justify-center items-center p-2 px-4 gap-2'>
-                        <label htmlFor="size" className='text-xl font-semibold'> Size : </label>
-                        <input
-                            type='range'
-                            min='50'
-                            max='100'
-                            value={arraySize}
-                            onChange={rangeChangeHandler}
-                        />
-                        <label htmlFor="size" className='text-xl font-semibold'>{arraySize}</label>
+                    <div className='text-4xl font-semibold p-2 inner'>
+                        {selectedAlgorithm
+                            .replace(/([A-Z])/g, ' $1')   // Add space before capital letters
+                            .replace(/^./, char => char.toUpperCase())}   {/* Capitalize first letter */}
                     </div>
 
-                    <div className='flex justify-center items-center'>
-                        <button
-                            onClick={() => { resetArray(arraySize) }}
-                            className='flex justify-center items-center gap-2 p-2 px-4 text-xl font-semibold border-none rounded-2xl transition duration-300 ease-in-out'>
-                            <i className="ri-refresh-line"></i>
-                            Generate New Array
-                        </button>
+                    <div className='flex justify-center items-center gap-6'>
+                        <div className='flex justify-center items-center p-2 px-4 gap-2'>
+                            <label htmlFor="size" className='text-xl font-semibold'> Size : </label>
+                            <input
+                                type='range'
+                                min='50'
+                                max='100'
+                                value={arraySize}
+                                onChange={rangeChangeHandler}
+                            />
+                            <label htmlFor="size" className='text-xl font-semibold'>{arraySize}</label>
+                        </div>
+
+                        <div className='flex justify-center items-center'>
+                            <button
+                                onClick={() => { resetArray(arraySize) }}
+                                className='flex justify-center items-center gap-2 p-2 px-4 text-xl font-semibold border-none rounded-2xl transition duration-300 ease-in-out'>
+                                <i className="ri-refresh-line"></i>
+                                Generate New Array
+                            </button>
+                        </div>
                     </div>
-                </div>
-            </div>
 
-            <div style={{ display: 'flex', alignItems: 'flex-end' }} className='w-10/12 h-[60%] p-2'>
-                {array.map((value, idx) => (
-                    <div
-                        key={idx}
-                        className="array-bar"
-                        style={{
-                            height: `${value}%`,
-                            width: `calc(100% / ${arraySize} - 1px)`,  // Adjust width based on array size',
-                            margin: '0 0.5px',
-                            backgroundColor: '#60a5fa',
-                            borderTopLeftRadius: '50px',
-                            borderTopRightRadius: '50px',
-                        }}
-                    ></div>
-                ))}
-            </div>
-
-            <form onSubmit={(e) => e.preventDefault()} className='flex justify-around items-center gap-2 p-2 w-10/12'>
-                <div className='flex justify-center items-center gap-2 p-2'>
-                    <label className="text-xl font-semibold">Select Sorting Algorithm : </label>
-                    <select value={selectedAlgorithm} onChange={(e) => { changeHandler(e) }} className='text-xl font-semibold p-2'>
-                        <option value="bubbleSort" className='text-xl font-semibold p-2'>Bubble Sort</option>
-                        <option value="mergeSort" className='text-xl font-semibold p-2'>Merge Sort</option>
-                        <option value="quickSort" className='text-xl font-semibold p-2'>Quick Sort</option>
-                        <option value="heapSort" className='text-xl font-semibold p-2'>Heap Sort</option>
-                        <option value="selectionSort" className='text-xl font-semibold p-2'>Selection Sort</option>
-                        <option value="insertionSort" className='text-xl font-semibold p-2'>Insertion Sort</option>
-                    </select>
                 </div>
 
-                <button onClick={visualizeSorting} className='flex justify-center items-center gap-2 p-2 px-4 text-xl font-semibold rounded-2xl transition duration-300 ease-in-out'>
-                    <i className="ri-play-fill"></i>
-                    <p>Visualize {selectedAlgorithm}</p>
-                </button>
-            </form>
+                <div style={{ display: 'flex', alignItems: 'flex-end' }} className='border-2 w-10/12 h-[50%] p-2'>
+                    {array.map((value, idx) => (
+                        <div
+                            key={idx}
+                            className="array-bar"
+                            style={{
+                                height: `${value}%`,
+                                width: `calc(100% / ${arraySize} - 1px)`,  // Adjust width based on array size',
+                                margin: '0 0.5px',
+                                backgroundColor: '#60a5fa',
+                                borderTopLeftRadius: '50px',
+                                borderTopRightRadius: '50px',
+                            }}
+                        ></div>
+                    ))}
+                </div>
+
+                <form onSubmit={(e) => e.preventDefault()} className='border-2 flex justify-around items-center gap-2 p-2 w-10/12 mb-[30px]'>
+                    <div className='flex justify-center items-center gap-2 p-2'>
+                        <label className="text-xl font-semibold">Select Sorting Algorithm : </label>
+                        <select value={selectedAlgorithm} onChange={(e) => { changeHandler(e) }} className='text-xl font-semibold p-2'>
+                            <option value="bubbleSort" className='text-xl font-semibold p-2'>Bubble Sort</option>
+                            <option value="mergeSort" className='text-xl font-semibold p-2'>Merge Sort</option>
+                            <option value="quickSort" className='text-xl font-semibold p-2'>Quick Sort</option>
+                            <option value="heapSort" className='text-xl font-semibold p-2'>Heap Sort</option>
+                            <option value="selectionSort" className='text-xl font-semibold p-2'>Selection Sort</option>
+                            <option value="insertionSort" className='text-xl font-semibold p-2'>Insertion Sort</option>
+                        </select>
+                    </div>
+
+                    <button onClick={visualizeSorting} className='flex justify-center items-center gap-2 p-2 px-4 text-xl font-semibold rounded-2xl transition duration-300 ease-in-out'>
+                        <i className="ri-play-fill"></i>
+                        <p>Visualize {selectedAlgorithm}</p>
+                    </button>
+                </form>
+            </div>
+
+            <div className='w-full '>
+                <SortingAlgorithmInfo selectedAlgorithm={selectedAlgorithm} />
+            </div>
 
         </div>
     );

@@ -5,9 +5,10 @@ import JAVA_Logo from '../Images/JAVALogo.webp'
 import JS_Logo from '../Images/jsLogo.webp'
 import PYTHON_Logo from '../Images/pyLogo.png'
 import ShowCode from '../Components/ShowCode'
+import Data from '../Data/SortingVisualizerData'
 
 
-const SortingAlgorithmInfo = () => {
+const SortingAlgorithmInfo = (props) => {
 
     const [language, setLanguage] = React.useState('c');
 
@@ -20,25 +21,53 @@ const SortingAlgorithmInfo = () => {
         }, 300);
     }
 
+    const description = Data[props.selectedAlgorithm]?.Description;
+
+    if (!description) return <p>No data available for {props.selectedAlgorithm}</p>;
+
+    const renderParagraph = (para, index) => {
+        if (typeof para === 'string') {
+            return <p key={index} className="text-2xl font-medium text-gray-600">{para}</p>;
+        }
+
+        if (para.parts && Array.isArray(para.parts)) {
+            return (
+                <p key={index} className="text-2xl font-medium text-gray-600">
+                    {para.parts.map((part, idx) => {
+                        if (part.type === 'text') {
+                            return <span key={idx}>{part.content}</span>;
+                        }
+                        if (part.type === 'clickable') {
+                            return (
+                                <button
+                                    key={idx}
+                                    onClick={() => onNavigate?.(part.onClickId)}
+                                    className="text-blue-600 hover:underline mx-1"
+                                >
+                                    {part.label}
+                                </button>
+                            );
+                        }
+                        return null;
+                    })}
+                </p>
+            );
+        }
+        return null;
+    };
+
     return (
         <div className='w-full flex flex-wrap justify-center items-center gap-12 py-10 flex-col border-2'>
             <div className='w-10/12 flex justify-between items-start gap-24 border-2'>
                 <div className='flex flex-col justify-center items-start gap-8 w-3/5 h-[540px] p-4'>
 
-                    <h1 className='text-4xl font-bold self-start'>Description (Bubblesort Algorithm) : </h1>
+                    <h1 className='text-4xl font-bold self-start'>
+                        {`Description (${props.selectedAlgorithm.replace(/([A-Z])/g, ' $1').replace(/^./, char => char.toUpperCase())}) :`}
+                    </h1>
+
 
                     <div className='flex flex-col justify-center items-center gap-5'>
-                        <p className='text-2xl font-medium text-gray-600'>
-                            Bubble Sort is an iterative sorting algorithm that imitates the movement of bubbles in sparkling water. The bubbles represents the elements of the data structure.
-                        </p>
-
-                        <p className='text-2xl font-medium text-gray-600'>
-                            The bigger bubbles reach the top faster than smaller bubbles, and this algorithm works in the same way. It iterates through the data structure and for each cycle compares the current element with the next one, swapping them if they are in the wrong order.
-                        </p>
-
-                        <p className='text-2xl font-medium text-gray-600'>
-                            It's a simple algorithm to implement, but not much efficient: on average, quadratic sorting algorithms with the same time complexity such as Selection Sort or Insertion Sort perform better.
-                        </p>
+                        {Object.keys(description).map((key, index) => renderParagraph(description[key], index))}
                     </div>
                 </div>
 
@@ -48,19 +77,19 @@ const SortingAlgorithmInfo = () => {
                         <table className='text-2xl font-medium text-gray-600 p-2'>
                             <tr className='border-b-2 border-gray-800 p-2'>
                                 <td className='border-r-2 border-gray-800 p-2'>Average Complexity</td>
-                                <td className='p-2'>O(n<sup>2</sup>)</td>
+                                <td className='p-2'>{Data[props.selectedAlgorithm].timeComplexity.average}</td>
                             </tr>
                             <tr className='border-b-2 border-gray-800 p-2'>
                                 <td className='border-r-2 border-gray-800 p-2'>Best Complexity</td>
-                                <td className='p-2'>O(n)</td>
+                                <td className='p-2'>{Data[props.selectedAlgorithm].timeComplexity.best}</td>
                             </tr>
                             <tr className='border-b-2 border-gray-800 p-2'>
                                 <td className='border-r-2 border-gray-800 p-2'>Worst Complexity</td>
-                                <td className='p-2'>O(n<sup>2</sup>)</td>
+                                <td className='p-2'>{Data[props.selectedAlgorithm].timeComplexity.worst}</td>
                             </tr>
                             <tr className='p-2'>
                                 <td className='border-r-2 border-gray-800 p-2'>Space Complexity</td>
-                                <td className='p-2'>O(1)</td>
+                                <td className='p-2'>{Data[props.selectedAlgorithm].spaceComplexity}</td>
                             </tr>
                         </table>
                     </div>
@@ -101,7 +130,7 @@ const SortingAlgorithmInfo = () => {
                         </div>
 
                         <div className='border-2 bg-gray-200 '>
-                            <ShowCode code={language} />
+                            <ShowCode code={language} selectedAlgorithm={props.selectedAlgorithm}/>
                         </div>
 
                     </div>

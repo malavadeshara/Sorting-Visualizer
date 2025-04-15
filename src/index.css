@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-.group:hover > div > img {
+.group:hover>div>img {
     transform: scale(1.2);
     transition: transform 0.3s ease-in-out;
 }
@@ -13,4 +13,8 @@
 .copyBtn:hover {
     background-color: gray;
     transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.array-bar {
+    transition: background-color 0.3s ease, transform 0.3s ease, height 0.5s ease-in-out, width 0.3s ease;
 }

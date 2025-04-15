@@ -1,9 +1,9 @@
 // ShowCode.jsx
 import React from 'react';
-import codeSamples from '../Data/data';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { oneLight } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import toast from 'react-hot-toast';
+import Data from '../Data/SortingVisualizerData';
 
 const ShowCode = (props) => {
 
@@ -13,7 +13,7 @@ const ShowCode = (props) => {
         button.children[0].classList.remove('ri-file-copy-line');
         button.children[0].classList.add('ri-file-copy-fill');
         toast.success('Copied!');
-        navigator.clipboard.writeText(codeSamples[props.code]);
+        navigator.clipboard.writeText(Data[props.selectedAlgorithm].code[props.code]);
         setTimeout(() => {
             button.classList.remove('clickAnimation');
             button.children[0].classList.remove('ri-file-copy-fill');
@@ -27,7 +27,7 @@ const ShowCode = (props) => {
                 <i className="ri-file-copy-line"></i>
             </div>
             <SyntaxHighlighter language={props.code} style={oneLight}>
-                {codeSamples[props.code]}
+                {Data[props.selectedAlgorithm].code[props.code]}
             </SyntaxHighlighter>
         </div>
     );
