@@ -23,7 +23,7 @@ const ShowCode = (props) => {
 
     return (
         <div className='relative'>
-            <div className='absolute top-2 right-2 copyBtn hover:bg-gray-200 border-2 w-[30px] h-[30px] flex justify-center items-center rounded-xl' onClick={(e) => copyButtonClickHandler(e)} >
+            <div className='absolute top-2 right-2 copyBtn bg-blue-300 border-2 w-[30px] h-[30px] flex justify-center items-center rounded-xl' onClick={(e) => copyButtonClickHandler(e)} >
                 <i className="ri-file-copy-line"></i>
             </div>
             <SyntaxHighlighter language={props.code} style={oneLight}>

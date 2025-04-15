@@ -57,9 +57,9 @@ const SortingAlgorithmInfo = (props) => {
     };
 
     return (
-        <div className='w-full flex flex-wrap justify-center items-center gap-12 py-10 flex-col border-2'>
-            <div className='w-10/12 flex justify-between items-start gap-24 border-2'>
-                <div className='flex flex-col justify-center items-start gap-8 w-3/5 h-[540px] p-4'>
+        <div className='w-full flex flex-wrap justify-center items-center gap-12 py-10 flex-col'>
+            <div className='w-10/12 flex justify-between items-start gap-24'>
+                <div className='flex flex-col justify-start items-start gap-8 w-3/5 h-[540px] p-4'>
 
                     <h1 className='text-4xl font-bold self-start'>
                         {`Description (${props.selectedAlgorithm.replace(/([A-Z])/g, ' $1').replace(/^./, char => char.toUpperCase())}) :`}
@@ -96,11 +96,11 @@ const SortingAlgorithmInfo = (props) => {
                 </div>
             </div>
 
-            <div className='w-10/12 flex justify-center items-start gap-24 py-10 border-2'>
-                <div className='relative w-1/2 h-[600px] gap-8 border-2 flex flex-col items-start justify-center p-4'>
-                    <h1 className='text-4xl font-bold self-start'>Implementation : </h1>
+            <div className='w-10/12 flex justify-start items-start gap-24 py-10'>
+                <div className='relative w-1/2 h-[700px] gap-8 flex flex-col items-start justify-start p-4'>
+                    <h1 className='text-4xl font-bold min-h-[50px] self-start'>Implementation : </h1>
 
-                    <div className='w-full border-2 h-full flex flex-col gap-4 p-4'>
+                    <div className='w-full flex max-h-[550px] flex-col gap-4 p-4'>
                         <div className='h-[60px] max-w-fit flex gap-2 items-center'>
                             <div className='w-[70px] h-[50px] flex justify-center items-center border-2 rounded-[10px] cursor-pointer group' onClick={(e) => { buttonClickHandler(e); }} value='c'>
                                 <div className='h-[40px] w-[40px] flex justify-center items-center p-1'>
@@ -129,10 +129,9 @@ const SortingAlgorithmInfo = (props) => {
                             </div>
                         </div>
 
-                        <div className='border-2 bg-gray-200 '>
+                        <div className='border-2 overflow-scroll'>
                             <ShowCode code={language} selectedAlgorithm={props.selectedAlgorithm}/>
                         </div>
-
                     </div>
                 </div>
             </div>

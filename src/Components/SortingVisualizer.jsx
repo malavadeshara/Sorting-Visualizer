@@ -316,10 +316,10 @@ const SortingVisualizer = () => {
 
 
     return (
-        <div className='w-full max-h-full flex items-center justify-around flex-col outer bg-black text-white'>
+        <div className='w-full max-h-full flex items-center justify-around flex-col'>
 
-            <div className='w-full h-[540px]  flex items-center justify-around flex-col'>
-                <div className='border-2 flex justify-between items-center w-10/12 mt-[30px]'>
+            <div className='w-full h-[540px] flex items-center justify-around flex-col'>
+                <div className='flex justify-between items-center w-10/12 mt-[30px]'>
 
                     <div className='text-4xl font-semibold p-2 inner'>
                         {selectedAlgorithm
@@ -352,7 +352,7 @@ const SortingVisualizer = () => {
 
                 </div>
 
-                <div style={{ display: 'flex', alignItems: 'flex-end' }} className='border-2 w-10/12 h-[50%] p-2'>
+                <div style={{ display: 'flex', alignItems: 'flex-end' }} className='w-10/12 h-[50%] p-2'>
                     {array.map((value, idx) => (
                         <div
                             key={idx}
@@ -369,7 +369,7 @@ const SortingVisualizer = () => {
                     ))}
                 </div>
 
-                <form onSubmit={(e) => e.preventDefault()} className='border-2 flex justify-around items-center gap-2 p-2 w-10/12 mb-[30px]'>
+                <form onSubmit={(e) => e.preventDefault()} className='flex justify-around items-center gap-2 p-2 w-10/12 mb-[30px]'>
                     <div className='flex justify-center items-center gap-2 p-2'>
                         <label className="text-xl font-semibold">Select Sorting Algorithm : </label>
                         <select value={selectedAlgorithm} onChange={(e) => { changeHandler(e) }} className='text-xl font-semibold p-2'>
